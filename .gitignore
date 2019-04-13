@@ -107,4 +107,6 @@ venv.bak/
 .idea/
 
 # datasets
-datasets/
+datasets/**/items_feature_matrix.csv
+datasets/**/items_name.csv
+datasets/**/rating_matrix.csv
