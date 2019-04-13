@@ -1,1 +1,1 @@
-In the datasets folder put the files containing data.
+In the datasets folder put the files containing the necessary data.
