@@ -7,9 +7,9 @@ from collections import defaultdict
 
 class DataLoader:
 
-    ratings_path = '../datasets/rating_matrix.csv'
-    features_path = '../datasets/items_feature_matrix.csv'
-    items_names_path = '../datasets/items_name.csv'
+    ratings_path = '../../datasets/rating_matrix.csv'
+    features_path = '../../datasets/items_feature_matrix.csv'
+    items_names_path = '../../datasets/items_name.csv'
 
     def load_rating_matrix(self):
 
