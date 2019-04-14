@@ -1,10 +1,7 @@
-from surprise import AlgoBase
-from surprise import PredictionImpossible
+from surprise import AlgoBase, PredictionImpossible
 from rec_sys.data.loader import DataLoader
-import math
 import numpy as np
 import heapq
-
 
 class ContentBasedAlgo(AlgoBase):
 
