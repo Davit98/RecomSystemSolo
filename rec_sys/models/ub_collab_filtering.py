@@ -49,7 +49,7 @@ class UserBasedCollaborativeFiltering:
 
         count = 1
         for item_id, rating_sum in sorted(candidates.items(), key=itemgetter(1), reverse=True):
-            if not item_id in looked_items:
+            if item_id not in looked_items:
                 item_raw_id = self.train_set.to_raw_iid(item_id)
                 print(item_raw_id, "-", self.dl.get_item_name(item_raw_id), "(" +
                       self.dl.get_item_course_name(item_raw_id) + ")", rating_sum)

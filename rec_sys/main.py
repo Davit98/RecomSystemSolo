@@ -14,12 +14,12 @@ rankings = dl.get_popularity_ranks()
 
 evaluator = Evaluator(data, rankings)
 
-content_knn = ContentBasedAlgo()
-evaluator.add_algo(content_knn,"ContentBased")
+# content_knn = ContentBasedAlgo()
+# evaluator.add_algo(content_knn,"ContentBased")
 
-# User-based KNN
-user_knn = KNNBasic(sim_options={'name': 'cosine', 'user_based': True})
-evaluator.add_algo(user_knn, "User KNN")
+# # User-based KNN
+# user_knn = KNNBasic(sim_options={'name': 'cosine', 'user_based': True})
+# evaluator.add_algo(user_knn, "User KNN")
 
 # Item-based KNN
 item_knn = KNNBasic(sim_options={'name': 'cosine', 'user_based': False})
@@ -33,12 +33,12 @@ evaluator.add_algo(item_knn, "Item KNN")
 # svd_pp = SVDpp()
 # evaluator.add_algo(svd_pp, "SVD++")
 
-random_algo = NormalPredictor()
-evaluator.add_algo(random_algo, "Random")
+# random_algo = NormalPredictor()
+# evaluator.add_algo(random_algo, "Random")
 
 evaluator.evaluate(True)
 
-evaluator.sample_top_n_recs(dl, user=12753303)
+# evaluator.sample_top_n_recs(dl, user=12753303)
 
 
 # # User-Based Collaborative Filtering

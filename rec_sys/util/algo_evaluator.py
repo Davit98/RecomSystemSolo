@@ -25,7 +25,7 @@ class AlgoEvaluator:
             # Build predictions for all ratings not in the training set
             all_predictions = self.algorithm.test(data.get_loocv_anti_test_set())
             # Compute top 10 recs for each user
-            top_n_predicted = Metrics.get_top_n(n)
+            top_n_predicted = Metrics.get_top_n(all_predictions, n)
             if verbose:
                 print("Computing hit-rate and rank metrics...")
             # See how often we recommended an item the user actually rated
@@ -40,7 +40,7 @@ class AlgoEvaluator:
                 print("Computing recommendations with full data set...")
             self.algorithm.fit(data.get_full_train_set())
             all_predictions = self.algorithm.test(data.get_full_anti_test_set())
-            top_n_predicted = Metrics.get_top_n(n)
+            top_n_predicted = Metrics.get_top_n(all_predictions, n)
             if verbose:
                 print("Analyzing coverage, diversity, and novelty...")
             # Print user coverage with a minimum predicted rating of 1.73 (Q3 of ratings):
