@@ -4,6 +4,7 @@ import heapq
 from collections import defaultdict
 from operator import itemgetter
 
+
 class UserBasedCollaborativeFiltering:
 
     def __init__(self, k=20):

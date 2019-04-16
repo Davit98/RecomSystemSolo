@@ -61,7 +61,7 @@ class DataSplitter:
     def get_loocv_anti_test_set(self):
         return self.loocv_anti_test_set
 
-    def get_similarities(self):
+    def get_sims_algo(self):
         return self.sims_algo
 
     def get_popularity_rankings(self):

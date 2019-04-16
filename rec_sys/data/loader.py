@@ -5,20 +5,21 @@ from surprise import Reader
 
 from collections import defaultdict
 
-class DataLoader:
 
+class DataLoader:
     ratings_path = '../../datasets/rating_matrix.csv'
     features_path = '../../datasets/items_feature_matrix.csv'
     items_names_path = '../../datasets/items_name.csv'
+
+    def __init__(self):
+        self.item_id_to_name = {}
+        self.item_id_to_course_name = {}
 
     def load_rating_matrix(self):
 
         reader = Reader(line_format='user item rating', sep=',', skip_lines=1)
 
         ratings_dataset = Dataset.load_from_file(self.ratings_path, reader=reader)
-
-        self.item_id_to_name = {}
-        self.item_id_to_course_name = {}
 
         with open(self.items_names_path, newline='', encoding='ISO-8859-1') as csvfile:
             reader = csv.reader(csvfile)
@@ -85,4 +86,3 @@ class DataLoader:
             return self.item_id_to_course_name[item_id]
         else:
             return ""
-

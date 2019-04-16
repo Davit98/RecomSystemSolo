@@ -3,6 +3,7 @@ from rec_sys.data.loader import DataLoader
 import numpy as np
 import heapq
 
+
 class ContentBasedAlgo(AlgoBase):
 
     def __init__(self, k=10, sim_options={}):
@@ -36,7 +37,8 @@ class ContentBasedAlgo(AlgoBase):
     def compute_cos_sim(self, item1_id, item2_id, item_features):
         item1_features = np.array(item_features[item1_id])
         item2_features = np.array(item_features[item2_id])
-        return np.dot(item1_features,item2_features)/(np.linalg.norm(item1_features)*np.linalg.norm(item2_features))
+        return np.dot(item1_features, item2_features) / (
+                    np.linalg.norm(item1_features) * np.linalg.norm(item2_features))
 
     def estimate(self, u, i):
 

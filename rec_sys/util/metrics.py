@@ -3,151 +3,144 @@ import itertools
 from surprise import accuracy
 from collections import defaultdict
 
+
 class Metrics:
 
+    @staticmethod
     def mae(predictions):
         return accuracy.mae(predictions, verbose=False)
 
+    @staticmethod
     def rmse(predictions):
         return accuracy.rmse(predictions, verbose=False)
 
+    @staticmethod
     def get_top_n(predictions, n=10, minimum_rating=0.0):
         top_n = defaultdict(list)
 
-        for userID, itemID, actualRating, estimated_rating, _ in predictions:
+        for user_id, item_id, actual_rating, estimated_rating, _ in predictions:
             if estimated_rating >= minimum_rating:
-                top_n[int(userID)].append((str(itemID), estimated_rating))
+                top_n[int(user_id)].append((str(item_id), estimated_rating))
 
-        for userID, ratings in top_n.items():
+        for user_id, ratings in top_n.items():
             ratings.sort(key=lambda x: x[1], reverse=True)
-            top_n[int(userID)] = ratings[:n]
+            top_n[int(user_id)] = ratings[:n]
 
         return top_n
 
-    def HitRate(top_n_predicted, left_out_predictions):
+    @staticmethod
+    def hit_rate(top_n_predicted, left_out_predictions):
         hits = 0
-        total = 0
 
-        # For each left-out rating
-        for leftOut in left_out_predictions:
-            userID = leftOut[0]
-            leftOutItemID = leftOut[1]
-            # Is it in the predicted top 10 for this user?
+        for left_out in left_out_predictions:
+            user_id = left_out[0]
+            left_out_item_id = left_out[1]
             hit = False
-            for itemID, predictedRating in top_n_predicted[int(userID)]:
-                if (str(leftOutItemID) == str(itemID)):
-                    hit = True
-                    break
-            if (hit) :
-                hits += 1
-
-            total += 1
-
-        # Compute overall precision
-        return hits/total
-
-    def CumulativeHitRate(topNPredicted, leftOutPredictions, ratingCutoff=0):
-        hits = 0
-        total = 0
-
-        # For each left-out rating
-        for userID, leftOutItemID, actualRating, estimatedRating, _ in leftOutPredictions:
-            # Only look at ability to recommend things the users actually liked...
-            if (actualRating >= ratingCutoff):
-                # Is it in the predicted top 10 for this user?
-                hit = False
-                for itemID, predictedRating in topNPredicted[int(userID)]:
-                    if (str(leftOutItemID) == itemID):
-                        hit = True
-                        break
-                if (hit) :
-                    hits += 1
-
-                total += 1
-
-        # Compute overall precision
-        return hits/total
-
-    def RatingHitRate(topNPredicted, leftOutPredictions):
-        hits = defaultdict(float)
-        total = defaultdict(float)
-
-        # For each left-out rating
-        for userID, leftOutItemID, actualRating, estimatedRating, _ in leftOutPredictions:
-            # Is it in the predicted top N for this user?
-            hit = False
-            for itemID, predictedRating in topNPredicted[int(userID)]:
-                if (str(leftOutItemID) == itemID):
+            for item_id, predicted_rating in top_n_predicted[int(user_id)]:
+                if str(left_out_item_id) == str(item_id):
                     hit = True
                     break
             if hit:
-                hits[actualRating] += 1
-
-            total[actualRating] += 1
-
-        # Compute overall precision
-        for rating in sorted(hits.keys()):
-            print (rating, hits[rating] / total[rating])
-
-    def AverageReciprocalHitRank(topNPredicted, leftOutPredictions):
-        summation = 0
-        total = 0
-        # For each left-out rating
-        for userID, leftOutItemID, actualRating, estimatedRating, _ in leftOutPredictions:
-            # Is it in the predicted top N for this user?
-            hitRank = 0
-            rank = 0
-            for itemID, predictedRating in topNPredicted[int(userID)]:
-                rank = rank + 1
-                if (str(leftOutItemID) == itemID):
-                    hitRank = rank
-                    break
-            if hitRank > 0:
-                summation += 1.0 / hitRank
-
-            total += 1
-
-        return summation / total
-
-    # What percentage of users have at least one "good" recommendation
-    def UserCoverage(topNPredicted, numUsers, ratingThreshold=0):
-        hits = 0
-        for userID in topNPredicted.keys():
-            hit = False
-            for itemID, predictedRating in topNPredicted[userID]:
-                if (predictedRating >= ratingThreshold):
-                    hit = True
-                    break
-            if (hit):
                 hits += 1
 
-        return hits / numUsers
+        return hits / len(left_out_predictions)
 
-    def Diversity(topNPredicted, simsAlgo):
+    @staticmethod
+    def cumulative_hit_rate(top_n_predicted, left_out_predictions, rating_cutoff=1.38):
+        hits = 0
+
+        for user_id, left_out_item_id, actual_rating, estimated_rating, _ in left_out_predictions:
+            if actual_rating >= rating_cutoff:
+                hit = False
+                for item_id, predicted_rating in top_n_predicted[int(user_id)]:
+                    if str(left_out_item_id) == item_id:
+                        hit = True
+                        break
+                if hit:
+                    hits += 1
+
+        return hits / len(left_out_predictions)
+
+    @staticmethod
+    def rating_hit_rate(top_n_predicted, left_out_predictions):
+        hits = defaultdict(float)
+        total = defaultdict(float)
+
+        for user_id, left_out_item_id, actual_rating, estimated_rating, _ in left_out_predictions:
+            hit = False
+            for item_id, predicted_rating in top_n_predicted[int(user_id)]:
+                if str(left_out_item_id) == item_id:
+                    hit = True
+                    break
+            if hit:
+                hits[actual_rating] += 1
+
+            total[actual_rating] += 1
+
+        for rating in sorted(hits.keys()):
+            print(rating, hits[rating] / total[rating])
+
+    @staticmethod
+    def average_reciprocal_hit_rank(top_n_predicted, left_out_predictions):
+        summation = 0
+
+        for user_id, left_out_item_id, actual_rating, estimated_rating, _ in left_out_predictions:
+            hit_rank = 0
+            rank = 0
+            for item_id, predicted_rating in top_n_predicted[int(user_id)]:
+                rank = rank + 1
+                if str(left_out_item_id) == item_id:
+                    hit_rank = rank
+                    break
+            if hit_rank > 0:
+                summation += 1.0 / hit_rank
+
+        return summation / len(left_out_predictions)
+
+    # What percentage of users have at least one "good" recommendation
+    @staticmethod
+    def user_coverage(top_n_predicted, n_users, rating_threshold=0):
+        hits = 0
+        for user_id in top_n_predicted.keys():
+            hit = False
+            for item_id, predicted_rating in top_n_predicted[user_id]:
+                if predicted_rating >= rating_threshold:
+                    hit = True
+                    break
+            if hit:
+                hits += 1
+
+        return hits / n_users
+
+    @staticmethod
+    def diversity(top_n_predicted, sims_algo):
         n = 0
         total = 0
-        simsMatrix = simsAlgo.compute_similarities()
-        for userID in topNPredicted.keys():
-            pairs = itertools.combinations(topNPredicted[userID], 2)
+        sim_matrix = sims_algo.compute_similarities()
+        for user_id in top_n_predicted.keys():
+            pairs = itertools.combinations(top_n_predicted[user_id], 2)
             for pair in pairs:
                 item1 = pair[0][0]
                 item2 = pair[1][0]
-                innerID1 = simsAlgo.trainset.to_inner_iid(str(item1))
-                innerID2 = simsAlgo.trainset.to_inner_iid(str(item2))
-                similarity = simsMatrix[innerID1][innerID2]
+                item1_inner_id = sims_algo.trainset.to_inner_iid(str(item1))
+                item2_inner_id = sims_algo.trainset.to_inner_iid(str(item2))
+                similarity = sim_matrix[item1_inner_id][item2_inner_id]
                 total += similarity
                 n += 1
 
-        S = total / n
-        return (1-S)
+        s = total / n
+        return 1 - s
 
-    def Novelty(topNPredicted, rankings):
+    @staticmethod
+    def novelty(top_n_predicted, rankings):
+        # min novelty = 5.5
+        # max novelty = 1312.5
         n = 0
         total = 0
-        for userID in topNPredicted.keys():
-            for rating in topNPredicted[userID]:
-                itemID = rating[0]
-                rank = rankings[itemID]
+        for user_id in top_n_predicted.keys():
+            for elem in top_n_predicted[user_id]:
+                item_id = elem[0]
+                rank = rankings[item_id]
                 total += rank
                 n += 1
         return total / n

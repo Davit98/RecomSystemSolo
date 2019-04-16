@@ -25,28 +25,28 @@ evaluator.add_algo(user_knn, "User KNN")
 item_knn = KNNBasic(sim_options={'name': 'cosine', 'user_based': False})
 evaluator.add_algo(item_knn, "Item KNN")
 
-# SVD
-svd = SVD()
-evaluator.add_algo(svd, "SVD")
+# # SVD
+# svd = SVD()
+# evaluator.add_algo(svd, "SVD")
 
-# SVD++
-svd_pp = SVDpp()
-evaluator.add_algo(svd_pp, "SVD++")
+# # SVD++
+# svd_pp = SVDpp()
+# evaluator.add_algo(svd_pp, "SVD++")
 
 random_algo = NormalPredictor()
 evaluator.add_algo(random_algo, "Random")
 
-evaluator.evaluate(False)
+evaluator.evaluate(True)
 
 evaluator.sample_top_n_recs(dl, user=12753303)
 
 
-## User-Based Collaborative Filtering
+# # User-Based Collaborative Filtering
 # ub_model = UserBasedCollaborativeFiltering()
 # ub_model.fit()
 # ub_model.get_top_n_recs(user=12753303, n=10)
 
-## Item-Based Collaborative Filtering
+# # Item-Based Collaborative Filtering
 # ib_model = ItemBasedCollaborativeFiltering()
 # ib_model.fit()
 # ib_model.get_top_n_recs(user=12753303, n=10)

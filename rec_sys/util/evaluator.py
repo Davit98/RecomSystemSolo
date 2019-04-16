@@ -36,7 +36,7 @@ class Evaluator:
         print("\nLegend:\n")
         print("RMSE:      Root Mean Squared Error. Lower values mean better accuracy.")
         print("MAE:       Mean Absolute Error. Lower values mean better accuracy.")
-        if (do_top_n):
+        if do_top_n:
             print("HR:        Hit Rate; how often we are able to recommend a left-out rating. Higher is better.")
             print(
                 "cHR:       Cumulative Hit Rate; hit rate, confined to ratings above a certain threshold. Higher is better.")
@@ -70,5 +70,5 @@ class Evaluator:
 
             recommendations.sort(key=lambda x: x[1], reverse=True)
 
-            for elem in recommendations[:10]:
+            for elem in recommendations[:k]:
                 print(elem[0], "-", dl.get_item_name(elem[0]), "(" + dl.get_item_course_name(elem[0]) + ")",elem[1])
