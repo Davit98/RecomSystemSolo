@@ -21,8 +21,8 @@ class DataLoader:
 
         ratings_dataset = Dataset.load_from_file(self.ratings_path, reader=reader)
 
-        with open(self.items_names_path, newline='', encoding='ISO-8859-1') as csvfile:
-            reader = csv.reader(csvfile)
+        with open(self.items_names_path, newline='', encoding='ISO-8859-1') as csv_file:
+            reader = csv.reader(csv_file)
             next(reader)
             for row in reader:
                 item_id = str(row[0])
@@ -86,3 +86,10 @@ class DataLoader:
             return self.item_id_to_course_name[item_id]
         else:
             return ""
+
+    def print_user_items_info(self, user_id, sort=False):
+        item_ratings = self.get_user_ratings(user_id)
+        if sort:
+            item_ratings.sort(key = lambda x: x[1], reverse=True)
+        for item_id, rating in item_ratings:
+            print(item_id, "-", self.get_item_name(item_id), "(" + self.get_item_course_name(item_id) + ")", rating)
