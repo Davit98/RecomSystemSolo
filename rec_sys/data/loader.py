@@ -90,6 +90,7 @@ class DataLoader:
     def print_user_items_info(self, user_id, sort=False):
         item_ratings = self.get_user_ratings(user_id)
         if sort:
-            item_ratings.sort(key = lambda x: x[1], reverse=True)
+            item_ratings.sort(key=lambda x: x[1], reverse=True)
         for item_id, rating in item_ratings:
             print(item_id, "-", self.get_item_name(item_id), "(" + self.get_item_course_name(item_id) + ")", rating)
+        print("\n")

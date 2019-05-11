@@ -99,7 +99,7 @@ class Metrics:
 
     # What percentage of users have at least one "good" recommendation
     @staticmethod
-    def user_coverage(top_n_predicted, n_users, rating_threshold=0):
+    def user_coverage(top_n_predicted, n_users, rating_threshold):
         hits = 0
         for user_id in top_n_predicted.keys():
             hit = False

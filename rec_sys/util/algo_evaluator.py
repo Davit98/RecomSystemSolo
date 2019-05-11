@@ -3,16 +3,32 @@ from rec_sys.util.metrics import Metrics
 
 class AlgoEvaluator:
 
-    def __init__(self, algorithm, name):
+    def __init__(self, algorithm, name, tt_split):
         self.algorithm = algorithm
         self.name = name
+        self.tt_split = tt_split
 
     def evaluate(self, data, do_top_n, n=10, verbose=True):
         metrics = {}
         if verbose:
             print("Evaluating accuracy...")
-        self.algorithm.fit(data.get_train_set())
-        predictions = self.algorithm.test(data.get_test_set())
+
+        if self.tt_split:
+            train_set = data.get_train_set()
+            self.algorithm.fit(train_set)
+            train_set_list = [(train_set.to_raw_uid(uid),train_set.to_raw_iid(iid),rating) for uid, iid, rating in
+                              train_set.all_ratings()]
+            print('RMSE on Train' + str(Metrics.rmse(self.algorithm.test(train_set_list))))
+            print('MAE on Train' + str(Metrics.mae(self.algorithm.test(train_set_list))))
+            predictions = self.algorithm.test(data.get_test_set())
+
+        else:
+            train_set = data.get_full_train_set()
+            self.algorithm.fit(train_set)
+            train_set_list = [(train_set.to_raw_uid(uid), train_set.to_raw_iid(iid), rating) for uid, iid, rating in
+                              train_set.all_ratings()]
+            predictions = self.algorithm.test(train_set_list)
+
         metrics["RMSE"] = Metrics.rmse(predictions)
         metrics["MAE"] = Metrics.mae(predictions)
 

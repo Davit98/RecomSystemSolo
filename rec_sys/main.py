@@ -10,50 +10,18 @@ dl = DataLoader()
 data = dl.load_rating_matrix()
 rankings = dl.get_popularity_ranks()
 
-dl.print_user_items_info(user_id=12753303,sort=True)
+dl.print_user_items_info(user_id=12753303, sort=True)
 
-# evaluator = Evaluator(data, rankings)
+evaluator = Evaluator(data, rankings)
 
-# content_knn = ContentBasedAlgo()
-# evaluator.add_algo(content_knn,"ContentBased")
-
-# # User-based KNN
-# user_knn = KNNBasic(sim_options={'name': 'cosine', 'user_based': True})
-# evaluator.add_algo(user_knn, "User KNN")
-
-# # Item-based KNN
-# item_knn = KNNBasic(sim_options={'name': 'cosine', 'user_based': False})
-# evaluator.add_algo(item_knn, "Item KNN")
-
-# # SVD
-# svd = SVD()
-# evaluator.add_algo(svd, "SVD")
-
-# # SVD++
-# svd_pp = SVDpp()
-# evaluator.add_algo(svd_pp, "SVD++")
+# k = 5, 20
+content_knn = ContentBasedAlgo(k=20)
+evaluator.add_algo(content_knn,"ContentBased")
 
 # random_algo = NormalPredictor()
 # evaluator.add_algo(random_algo, "Random")
 
-# evaluator.evaluate(True)
+evaluator.evaluate(True)
 
-# evaluator.sample_top_n_recs(dl, user=12753303)
-
-
-# # User-Based Collaborative Filtering
-# ub_model = UserBasedCollaborativeFiltering()
-# ub_model.fit()
-# ub_model.get_top_n_recs(user=12753303, n=10)
-
-# # Item-Based Collaborative Filtering
-# ib_model = ItemBasedCollaborativeFiltering()
-# ib_model.fit()
-# ib_model.get_top_n_recs(user=12753303, n=10)
-
-
-
-
-
-
+evaluator.sample_top_n_recs(dl, user=12753303)
 

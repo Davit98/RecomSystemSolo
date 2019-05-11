@@ -8,8 +8,8 @@ class Evaluator:
         self.dataset = DataSplitter(dataset, rankings)
         self.algorithms = []
 
-    def add_algo(self, algorithm, name):
-        alg = AlgoEvaluator(algorithm, name)
+    def add_algo(self, algorithm, name, tt_split=False):
+        alg = AlgoEvaluator(algorithm, name, tt_split)
         self.algorithms.append(alg)
 
     def evaluate(self, do_top_n):
