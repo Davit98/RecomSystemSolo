@@ -1,4 +1,5 @@
 import csv
+import os
 
 from surprise import Dataset
 from surprise import Reader
@@ -7,9 +8,10 @@ from collections import defaultdict
 
 
 class DataLoader:
-    ratings_path = '../../datasets/rating_matrix.csv'
-    features_path = '../../datasets/items_feature_matrix.csv'
-    items_names_path = '../../datasets/items_name.csv'
+
+    ratings_path = '../datasets/rating_matrix.csv'
+    features_path = '../datasets/items_feature_matrix.csv'
+    items_names_path = '../datasets/items_name.csv'
 
     def __init__(self):
         self.item_id_to_name = {}

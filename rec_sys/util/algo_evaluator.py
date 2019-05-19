@@ -18,8 +18,8 @@ class AlgoEvaluator:
             self.algorithm.fit(train_set)
             train_set_list = [(train_set.to_raw_uid(uid),train_set.to_raw_iid(iid),rating) for uid, iid, rating in
                               train_set.all_ratings()]
-            print('RMSE on Train' + str(Metrics.rmse(self.algorithm.test(train_set_list))))
-            print('MAE on Train' + str(Metrics.mae(self.algorithm.test(train_set_list))))
+            print('RMSE on Train: ' + str(Metrics.rmse(self.algorithm.test(train_set_list))))
+            print('MAE on Train: ' + str(Metrics.mae(self.algorithm.test(train_set_list))))
             predictions = self.algorithm.test(data.get_test_set())
 
         else:
